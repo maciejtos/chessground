@@ -11,6 +11,7 @@ import TRexAvatar from '@/components/avatars/TRexAvatar';
 import ElephantAvatar from '@/components/avatars/ElephantAvatar';
 import CreeperAvatar from '@/components/avatars/CreeperAvatar';
 import NinjaAvatar from '@/components/avatars/NinjaAvatar';
+import BatmanAvatar from '@/components/avatars/BatmanAvatar';
 
 type OpponentOption = {
   id: AvatarType;
@@ -59,6 +60,15 @@ const OPPONENTS: OpponentOption[] = [
     sound: () => soundEngine.ninjaKatanaDraw(),
     avatar: <NinjaAvatar preview />,
   },
+  {
+    id: 'batman',
+    nameKey: 'opponent.batman.name',
+    descKey: 'opponent.batman.desc',
+    colorClass: 'bg-slate-800 border-slate-950 text-white',
+    shadowClass: 'shadow-[0_8px_0_rgb(15,23,42)]', // slate-900
+    sound: () => soundEngine.playBatSignal(),
+    avatar: <BatmanAvatar preview />,
+  },
 ];
 
 const DIFFICULTY_LEVELS = [
@@ -76,11 +86,10 @@ function OpponentCard({ opponent, isSelected, onClick, t, isStarting }: { oppone
       whileTap={!isStarting ? { scale: 0.95, y: 0 } : {}}
       onClick={onClick}
       disabled={isStarting}
-      className={`relative w-full h-full flex items-center justify-center p-4 rounded-[2rem] border-4 transition-all duration-300 text-center overflow-hidden ${
-        isSelected
+      className={`relative w-full h-full flex items-center justify-center p-4 rounded-[2rem] border-4 transition-all duration-300 text-center overflow-hidden ${isSelected
           ? `${opponent.colorClass} ${opponent.shadowClass} scale-105 z-10 border-[6px]`
           : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50 shadow-[0_4px_0_rgb(229,231,235)]'
-      }`}
+        }`}
     >
       {/* Avatar Container - Dims when selected */}
       <div className={`relative z-10 flex items-center justify-center w-full h-full transition-opacity duration-500 ${isSelected ? 'opacity-30' : 'opacity-100'}`}>
@@ -88,7 +97,7 @@ function OpponentCard({ opponent, isSelected, onClick, t, isStarting }: { oppone
           {opponent.avatar}
         </div>
       </div>
-      
+
       {/* Name appears in center when selected */}
       <AnimatePresence>
         {isSelected && (
@@ -102,7 +111,7 @@ function OpponentCard({ opponent, isSelected, onClick, t, isStarting }: { oppone
             <h3 className="text-xl sm:text-2xl md:text-3xl font-black leading-tight drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] px-2 text-center" style={{ textShadow: '0 4px 10px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,1)' }}>
               {t(opponent.nameKey)}
             </h3>
-            
+
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -121,12 +130,12 @@ function OpponentCard({ opponent, isSelected, onClick, t, isStarting }: { oppone
 export default function SelectPage() {
   const router = useRouter();
   const { t } = useTranslation();
-  
+
   const setAvatar = useGameStore((s) => s.setAvatar);
   const setOpponentName = useGameStore((s) => s.setOpponentName);
   const setDifficulty = useGameStore((s) => s.setDifficulty);
   const resetGame = useGameStore((s) => s.resetGame);
-  
+
   const [selectedId, setSelectedId] = useState<AvatarType | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState<number>(3);
   const [isStarting, setIsStarting] = useState(false);
@@ -135,13 +144,13 @@ export default function SelectPage() {
     if (!selectedId) return;
     setIsStarting(true);
     soundEngine.playMove();
-    
+
     const opponent = OPPONENTS.find((o) => o.id === selectedId)!;
     setAvatar(selectedId);
     setOpponentName(t(opponent.nameKey));
     setDifficulty(selectedDifficulty);
     resetGame();
-    
+
     setTimeout(() => {
       router.push('/play');
     }, 1200);
@@ -150,11 +159,11 @@ export default function SelectPage() {
   const selectedOpponent = OPPONENTS.find(o => o.id === selectedId);
 
   return (
-    <div className="flex-1 w-full h-full flex flex-col items-center justify-center p-4 min-h-0 bg-sky-100">
-      <div className="flex flex-col lg:flex-row w-full max-w-6xl h-full max-h-[700px] gap-6 lg:gap-10 items-center justify-center">
-        
+    <div className="flex-1 w-full h-full flex flex-col items-center lg:justify-center p-4 min-h-0 bg-sky-100 overflow-y-auto lg:overflow-hidden">
+      <div className="flex flex-col lg:flex-row w-full max-w-6xl h-auto lg:h-full lg:max-h-[700px] gap-6 lg:gap-10 items-center justify-center py-6 lg:py-0">
+
         {/* Left Side: Info & Controls */}
-        <motion.div 
+        <motion.div
           animate={{ x: isStarting ? -300 : 0, opacity: isStarting ? 0 : 1 }}
           transition={{ duration: 0.6, ease: "easeInOut" }}
           className="flex-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left w-full max-w-md z-10"
@@ -198,11 +207,10 @@ export default function SelectPage() {
                         soundEngine.playMove();
                         setSelectedDifficulty(diff.level);
                       }}
-                      className={`flex-1 py-3 rounded-xl font-bold transition-all duration-200 border-b-4 ${
-                        isActive 
-                          ? `${diff.color} border-black/20 shadow-inner scale-105` 
+                      className={`flex-1 py-3 rounded-xl font-bold transition-all duration-200 border-b-4 ${isActive
+                          ? `${diff.color} border-black/20 shadow-inner scale-105`
                           : 'bg-gray-100 text-gray-500 border-gray-300 hover:bg-gray-200'
-                      }`}
+                        }`}
                     >
                       <span className="text-sm">{diff.level}</span>
                     </button>
@@ -229,17 +237,17 @@ export default function SelectPage() {
 
         {/* Right Side: Opponent Grid */}
         <div className="flex-1 w-full max-w-lg lg:max-w-none h-full flex flex-col justify-center min-h-0 relative z-20">
-          <div className="grid grid-cols-2 grid-rows-2 gap-4 sm:gap-6 w-full h-[450px] sm:h-[500px] p-2">
+          <div className="grid grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-4 sm:gap-6 w-full h-auto min-h-[450px] sm:min-h-[500px] p-2">
             {OPPONENTS.map((opponent, index) => {
               const isSelected = selectedId === opponent.id;
-              
+
               // dramatic animation values when starting
               const variants = {
                 normal: { opacity: 1, scale: 1, x: 0, y: 0 },
                 startingSelected: { opacity: 1, scale: 1.15, zIndex: 50, filter: 'brightness(1.1)' },
                 startingUnselected: { opacity: 0, scale: 0.95, filter: 'blur(4px)' }
               };
-              
+
               return (
                 <motion.div
                   key={opponent.id}
@@ -253,7 +261,7 @@ export default function SelectPage() {
                     opponent={opponent}
                     isSelected={isSelected}
                     onClick={() => {
-                      if(isStarting) return;
+                      if (isStarting) return;
                       setSelectedId(opponent.id);
                       opponent.sound();
                     }}
@@ -277,7 +285,7 @@ export default function SelectPage() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className={`fixed inset-0 z-[100] flex flex-col items-center justify-center ${selectedOpponent.colorClass.replace('bg-', 'bg-').split(' ')[0]}`}
-            style={{ backgroundColor: selectedOpponent.colorClass.includes('green') ? '#dcfce7' : selectedOpponent.colorClass.includes('yellow') ? '#fef9c3' : selectedOpponent.colorClass.includes('lime') ? '#ecfccb' : '#fee2e2' }}
+            style={{ backgroundColor: selectedOpponent.colorClass.includes('green') ? '#dcfce7' : selectedOpponent.colorClass.includes('yellow') ? '#fef9c3' : selectedOpponent.colorClass.includes('lime') ? '#ecfccb' : selectedOpponent.id === 'batman' ? '#0f172a' : '#fee2e2' }}
           >
             <motion.div
               initial={{ scale: 0.1, y: -500, rotate: -45 }}
@@ -287,7 +295,7 @@ export default function SelectPage() {
             >
               {selectedOpponent.avatar}
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.5, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}

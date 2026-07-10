@@ -85,57 +85,56 @@ export default function Navbar() {
             {t('play.changeOpponent')}
           </button>
         )}
-        
+
         <div className="relative">
-        <button
-          onClick={() => setLangOpen(!langOpen)}
-          className="flex items-center justify-center gap-2 px-4 bg-white rounded-full border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors font-bold text-gray-700 btn-bouncy shadow-sm h-[40px]"
-        >
-          <span className="text-lg">{currentLang.flag}</span>
-          <span className="text-sm hidden sm:block">{currentLang.label}</span>
-          <svg suppressHydrationWarning width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className={`transition-transform duration-300 text-gray-400 ${langOpen ? 'rotate-180' : ''}`}>
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
-        </button>
+          <button
+            onClick={() => setLangOpen(!langOpen)}
+            className="flex items-center justify-center gap-2 px-4 bg-white rounded-full border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors font-bold text-gray-700 btn-bouncy shadow-sm h-[40px]"
+          >
+            <span className="text-lg">{currentLang.flag}</span>
+            <span className="text-sm hidden sm:block">{currentLang.label}</span>
+            <svg suppressHydrationWarning width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className={`transition-transform duration-300 text-gray-400 ${langOpen ? 'rotate-180' : ''}`}>
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
 
-        <AnimatePresence>
+          <AnimatePresence>
+            {langOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="absolute right-0 top-full mt-2 py-2 bg-white border-4 border-gray-100 rounded-2xl shadow-xl min-w-[120px] overflow-hidden z-50"
+              >
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      setLanguage(lang.code);
+                      setLangOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-bold transition-colors ${language === lang.code
+                        ? 'text-blue-700 bg-blue-50'
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                      }`}
+                  >
+                    <span className="text-xl">{lang.flag}</span>
+                    <span>{lang.label}</span>
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Click outside to close */}
           {langOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-              className="absolute right-0 top-full mt-2 py-2 bg-white border-4 border-gray-100 rounded-2xl shadow-xl min-w-[120px] overflow-hidden z-50"
-            >
-              {languages.map((lang) => (
-                <button
-                  key={lang.code}
-                  onClick={() => {
-                     setLanguage(lang.code);
-                     setLangOpen(false);
-                  }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-bold transition-colors ${
-                    language === lang.code
-                      ? 'text-blue-700 bg-blue-50'
-                      : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-                  }`}
-                >
-                  <span className="text-xl">{lang.flag}</span>
-                  <span>{lang.label}</span>
-                </button>
-              ))}
-            </motion.div>
+            <div
+              className="fixed inset-0 z-[-1]"
+              onClick={() => setLangOpen(false)}
+            />
           )}
-        </AnimatePresence>
-
-        {/* Click outside to close */}
-        {langOpen && (
-          <div
-            className="fixed inset-0 z-[-1]"
-            onClick={() => setLangOpen(false)}
-          />
-        )}
-      </div>
+        </div>
       </div>
     </nav>
   );

@@ -13,6 +13,7 @@ import { TRexSVG } from './avatars/TRexAvatar';
 import { ElephantSVG } from './avatars/ElephantAvatar';
 import { CreeperSVG } from './avatars/CreeperAvatar';
 import { NinjaSVG } from './avatars/NinjaAvatar';
+import { BatmanSVG } from './avatars/BatmanAvatar';
 
 interface ThemeConfig {
   lightSquare: string;
@@ -42,6 +43,11 @@ const BOARD_THEMES: Record<AvatarType, ThemeConfig> = {
     darkSquare: '#ef4444',  // red-500
     accent: 'bg-red-500/30',
   },
+  batman: {
+    lightSquare: '#cbd5e1', // slate-300
+    darkSquare: '#1e293b',  // slate-800
+    accent: 'bg-yellow-500/30',
+  },
 };
 
 export default function ChessBoard() {
@@ -70,8 +76,8 @@ export default function ChessBoard() {
   const gameRef = useRef(new Chess());
   const containerRef = useRef<HTMLDivElement>(null);
   const aiTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  
-  const [pendingPromotion, setPendingPromotion] = useState<{from: string, to: string} | null>(null);
+
+  const [pendingPromotion, setPendingPromotion] = useState<{ from: string, to: string } | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
   const currentAvatar = isMounted ? rawAvatar : ('trex' as AvatarType);
@@ -293,11 +299,11 @@ export default function ChessBoard() {
 
   const handleUndo = useCallback(() => {
     if (gameOver && gameResult !== t('play.checkmate') && gameResult !== t('play.youWin')) return; // Allow undoing checkmate
-    
+
     if (aiTimeoutRef.current) clearTimeout(aiTimeoutRef.current);
-    
+
     const game = gameRef.current;
-    
+
     // Determine how many moves to undo
     // If it's not the player's turn (AI is thinking), undo 1 move (the player's).
     // If it is the player's turn, undo 2 moves (AI's and Player's).
@@ -306,8 +312,8 @@ export default function ChessBoard() {
     if (game.history().length < movesToUndo) movesToUndo = game.history().length;
     if (movesToUndo === 0) return;
 
-    const undoneCaptures: Array<{color: 'white'|'black', piece: string}> = [];
-    
+    const undoneCaptures: Array<{ color: 'white' | 'black', piece: string }> = [];
+
     for (let i = 0; i < movesToUndo; i++) {
       const move = game.undo();
       if (move && move.captured) {
@@ -396,19 +402,19 @@ export default function ChessBoard() {
       case 'elephant': return <ElephantSVG />;
       case 'creeper': return <CreeperSVG />;
       case 'ninja': return <NinjaSVG />;
+      case 'batman': return <BatmanSVG />;
       default: return <TRexSVG />;
     }
   };
 
   const renderPieces = (pieces: string[], colorCaptured: 'w' | 'b') => {
     return pieces.map((p, i) => (
-      <span 
-        key={i} 
-        className={`text-lg sm:text-xl md:text-2xl -ml-2 sm:-ml-3 first:ml-0 relative ${
-          colorCaptured === 'w' 
-            ? 'text-white drop-shadow-[0_2px_1px_rgba(0,0,0,0.8)]' 
+      <span
+        key={i}
+        className={`text-lg sm:text-xl md:text-2xl -ml-2 sm:-ml-3 first:ml-0 relative ${colorCaptured === 'w'
+            ? 'text-white drop-shadow-[0_2px_1px_rgba(0,0,0,0.8)]'
             : 'text-gray-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]'
-        }`}
+          }`}
         style={{ zIndex: i }}
       >
         {getPieceIcon(p)}
@@ -428,14 +434,14 @@ export default function ChessBoard() {
 
   return (
     <div ref={containerRef} className="flex flex-col md:flex-row items-center md:items-stretch justify-center w-full relative gap-2 md:gap-6">
-      
+
       {/* Left Sidebar: Headers (Above on mobile, Left on desktop) */}
       <div className="flex flex-row md:flex-col justify-between w-full max-w-[650px] md:w-[220px] gap-2 md:py-2 flex-shrink-0">
-        
+
         {/* Opponent Header */}
         <div className="flex-1 md:flex-none flex flex-col items-start justify-center px-3 py-2 bg-black/20 backdrop-blur-sm rounded-xl shadow-sm border-2 border-white/20">
           <div className="flex items-center gap-2 mb-1">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/50 flex items-center justify-center font-bold overflow-hidden shadow-inner p-1">
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/50 flex items-center justify-center font-bold overflow-hidden shadow-inner p-1 [&>svg]:w-full [&>svg]:h-full">
               {getAvatarIcon(currentAvatar)}
             </div>
             <span className="text-white font-bold tracking-widest uppercase text-xs md:text-sm drop-shadow-md">{opponentName}</span>
@@ -465,7 +471,7 @@ export default function ChessBoard() {
       </div>
 
       {/* Board */}
-      <div className="relative w-full max-w-[650px] border-[10px] border-white rounded-[1.5rem] shadow-2xl overflow-hidden bg-white p-1 box-content flex-shrink-0">
+      <div className="relative w-full max-w-[650px] border-[10px] border-white rounded-[1.5rem] shadow-2xl overflow-hidden bg-white p-1 box-border flex-shrink-0 touch-none">
         {isMounted ? (
           <Chessboard options={chessboardOptions} />
         ) : (
@@ -494,13 +500,15 @@ export default function ChessBoard() {
                   <button
                     key={p}
                     onClick={() => handlePromotion(p)}
-                    className="w-16 h-16 bg-blue-50 border-4 border-blue-200 rounded-2xl flex items-center justify-center hover:bg-blue-100 transition-colors shadow-sm"
+                    className="w-16 h-16 bg-blue-50 border-4 border-blue-200 rounded-2xl flex items-center justify-center hover:bg-blue-100 transition-colors shadow-sm text-4xl"
                   >
-                    <img src={`/pieces/${playerColor === 'white' ? 'w' : 'b'}${p.toUpperCase()}.svg`} alt={p} className="w-12 h-12" />
+                    <span className={playerColor === 'white' ? 'text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]' : 'text-gray-900 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]'}>
+                      {getPieceIcon(p)}
+                    </span>
                   </button>
                 ))}
               </div>
-              <button 
+              <button
                 onClick={() => setPendingPromotion(null)}
                 className="mt-6 text-sm font-bold text-gray-400 hover:text-gray-600"
               >
@@ -527,19 +535,19 @@ export default function ChessBoard() {
               style={{ borderColor: theme.darkSquare }}
             >
               <div className="absolute -top-24 w-40 h-40 flex items-center justify-center filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)]">
-                 <div className="transform scale-110">
-                   {getAvatarIcon(currentAvatar)}
-                 </div>
+                <div className="transform scale-110">
+                  {getAvatarIcon(currentAvatar)}
+                </div>
               </div>
-              
+
               <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-widest text-center mt-2 mb-2" style={{ color: theme.darkSquare }}>
                 {t('play.gameOver')}
               </h2>
-              
+
               <div className="text-base sm:text-lg font-bold text-gray-600 text-center mb-8 px-6 py-3 bg-gray-100/80 rounded-2xl border-2 border-gray-200">
                 {gameResult}
               </div>
-              
+
               <button
                 onClick={handleNewGame}
                 className="w-full py-4 text-white font-black text-xl tracking-widest uppercase rounded-2xl transition-transform active:scale-95 shadow-xl border-b-4 border-black/20"

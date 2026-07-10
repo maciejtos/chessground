@@ -8,12 +8,14 @@ import TRexAvatar from './TRexAvatar';
 import ElephantAvatar from './ElephantAvatar';
 import CreeperAvatar from './CreeperAvatar';
 import NinjaAvatar from './NinjaAvatar';
+import BatmanAvatar from './BatmanAvatar';
 
 const avatarComponents = {
   trex: TRexAvatar,
   elephant: ElephantAvatar,
   creeper: CreeperAvatar,
   ninja: NinjaAvatar,
+  batman: BatmanAvatar,
 };
 
 export default function AvatarWrapper() {

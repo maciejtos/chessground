@@ -1049,6 +1049,44 @@ class SoundEngine {
     setTimeout(() => this.swordSlash(), 130);
   }
 
+  // ══════════════════════════════════════════════════════════════
+  // ─── BATMAN SOUNDS ──────────────────────────────────────────
+  // ══════════════════════════════════════════════════════════════
+
+  /** Dramatic Bat-Signal hum (low droning sweep) */
+  playBatSignal(): void {
+    const ctx = this.getCtx();
+    const now = ctx.currentTime;
+    
+    // Deep hum
+    this.tone('sine', 30, 2.0, { freqEnd: 45, gain: 0.4, attack: 0.2 });
+    this.tone('triangle', 60, 2.0, { freqEnd: 90, gain: 0.15, attack: 0.3 });
+    
+    // High-pitched electrical buzz
+    this.noise(2.0, {
+      gain: 0.03,
+      attack: 0.4,
+      filterType: 'bandpass',
+      filterFreq: 2000,
+      filterFreqEnd: 1000,
+      filterQ: 3,
+    });
+  }
+
+  /** Sharp Batarang slice */
+  batarangSwoosh(): void {
+    this.tone('triangle', 800, 0.3, { freqEnd: 150, gain: 0.2, attack: 0.005 });
+    this.noise(0.3, { gain: 0.1, attack: 0.01, filterType: 'highpass', filterFreq: 2000 });
+  }
+
+  /** Grappling hook metal snap */
+  batGrapple(): void {
+    // Metal snap
+    this.tone('square', 500, 0.15, { freqEnd: 80, gain: 0.15, attack: 0.001 });
+    // Zip wire noise
+    this.noise(0.5, { gain: 0.07, attack: 0.01, filterType: 'bandpass', filterFreq: 3000, filterQ: 2 });
+  }
+
   // ─── Speech ───────────────────────────────────────────────────
 
   speak(text: string, opts?: { pitch?: number; rate?: number; voice?: string }): void {
@@ -1095,6 +1133,11 @@ class SoundEngine {
   /** Ninja – calm, measured, slightly stern */
   speakAsNinja(text: string): void {
     this.speak(text, { pitch: 0.9, rate: 1.0 });
+  }
+
+  /** Batman – deep, mysterious, raspy */
+  speakAsBatman(text: string): void {
+    this.speak(text, { pitch: 0.2, rate: 0.75 });
   }
 }
 

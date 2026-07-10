@@ -15,7 +15,7 @@ export const CreeperSVG = ({
   isCharged?: boolean;
   isBlinking?: boolean;
 }) => (
-  <svg suppressHydrationWarning viewBox="0 0 160 160" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+  <svg suppressHydrationWarning viewBox="0 0 160 160" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="creeper-bg" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0%" stopColor={isCharged ? '#7B1FA2' : '#41b346'} />

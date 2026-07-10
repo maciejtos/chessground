@@ -61,6 +61,9 @@ const translations: Record<Language, Record<string, string>> = {
     'opponent.ninja.name': 'Kai the Red Ninja',
     'opponent.ninja.title': 'The Grand Master',
     'opponent.ninja.desc': 'Lightning-fast calculations and deadly precision. Only the brave dare challenge Kai!',
+    'opponent.batman.name': 'The Dark Knight',
+    'opponent.batman.title': 'The Silent Guardian',
+    'opponent.batman.desc': 'A master tactician who strikes from the shadows. Batman evaluates every move like a mystery to solve.',
 
     // Play
     'play.turn': 'Turn',
@@ -131,6 +134,9 @@ const translations: Record<Language, Record<string, string>> = {
     'opponent.ninja.name': 'Кай — Красный Ниндзя',
     'opponent.ninja.title': 'Великий мастер',
     'opponent.ninja.desc': 'Молниеносные расчёты и смертельная точность. Только смелые бросят вызов Каю!',
+    'opponent.batman.name': 'Тёмный Рыцарь',
+    'opponent.batman.title': 'Молчаливый Страж',
+    'opponent.batman.desc': 'Мастер-тактик, наносящий удар из тени. Бэтмен оценивает каждый ход как загадку, которую нужно решить.',
 
     // Play
     'play.turn': 'Ход',

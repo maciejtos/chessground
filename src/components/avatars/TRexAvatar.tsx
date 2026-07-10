@@ -32,7 +32,7 @@ export const TRexSVG = ({
   isDefeated?: boolean;
   isBlinking?: boolean;
 }) => (
-  <svg suppressHydrationWarning viewBox="0 0 160 160" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+  <svg suppressHydrationWarning viewBox="0 0 160 160" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="trex-skin" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stopColor={isDefeated ? '#5a7a5c' : '#2E7D32'} />

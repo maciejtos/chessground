@@ -17,7 +17,7 @@ export const NinjaSVG = ({
   isElemental?: boolean;
   isBlinking?: boolean;
 }) => (
-  <svg suppressHydrationWarning viewBox="0 0 160 160" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+  <svg suppressHydrationWarning viewBox="0 0 160 160" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="ninja-red" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stopColor={isDefeated ? '#8B3030' : isElemental ? '#FF6F00' : '#d32f2f'} />

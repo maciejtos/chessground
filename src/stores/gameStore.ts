@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type AvatarType = 'trex' | 'elephant' | 'creeper' | 'ninja';
+export type AvatarType = 'trex' | 'elephant' | 'creeper' | 'ninja' | 'batman';
 export type GameEvent =
   | 'game-start'
   | 'thinking'

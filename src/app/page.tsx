@@ -11,7 +11,7 @@ export default function LobbyPage() {
   const router = useRouter();
   const unlockAudio = useGameStore((s) => s.unlockAudio);
   const { t } = useTranslation();
-  
+
   const [isHovered, setIsHovered] = useState(false);
 
   const handlePlay = async () => {
@@ -23,10 +23,10 @@ export default function LobbyPage() {
 
   return (
     <div className="flex-1 w-full h-full relative flex flex-col items-center justify-center overflow-hidden p-4">
-      
+
       {/* Hero Content */}
       <div className="relative z-10 flex flex-col items-center justify-center gap-6 sm:gap-8 text-center w-full max-w-3xl mx-auto flex-1 min-h-0 bg-white/40 backdrop-blur-md p-8 sm:p-12 rounded-[3rem] border-8 border-white/60 shadow-2xl">
-        
+
         {/* Playful Icon */}
         <motion.div
           animate={{ rotate: isHovered ? [0, -15, 15, -15, 15, 0] : 0 }}
